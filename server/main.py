@@ -1,6 +1,6 @@
 """Local-only OpenCV/LBPH attendance service for Enkel.
 
-Pipeline (per spec):
+"""  """Pipeline (per spec):
   1. Haar Cascade  — detects face rectangles in each frame
   2. Sample collection — crops, resizes to 200x200 grayscale, saves 100 samples
   3. LBPH training — builds texture fingerprint model (trainer.yml / lbph.yml)
