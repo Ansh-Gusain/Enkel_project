@@ -1,0 +1,26 @@
+node_modules/
+dist/
+build/
+.cache/
+.env*
+.vite/
+vite.config.*.timestamp-*
+*.tsbuildinfo
+*-debug.log*
+logs/
+*.log
+.claude-replay.*
+.tmp-*
+/.figma/design-context/
+
+# Platform-managed agentplat state
+/.plugins/
+/.opencode-skills/
+
+# Local biometric and attendance data — never commit
+/server/data/
+__pycache__/
+*.py[cod]
+
+# Python venv — not needed for deployment
+/server/.venv/
