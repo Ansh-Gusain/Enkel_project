@@ -14,7 +14,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Icon, Logo } from "./components/ui";
 import Sidebar  from "./components/Sidebar";
-import AskEnkel from "./components/AskEnkel";
 import Landing  from "./components/Landing";
 import { Page } from "./types";
 
@@ -138,9 +137,6 @@ export default function App() {
 
       {/* Main content area */}
       <main>{content}</main>
-
-      {/* Floating "Ask Enkel" assistant */}
-      <AskEnkel />
     </div>
   );
 }

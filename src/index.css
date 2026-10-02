@@ -294,3 +294,113 @@ textarea { width: 100%; min-height: 95px; resize: vertical; outline: none; borde
   .principles { padding: 55px 20px; }.landing-cta h2, .center-title h2 { font-size: 27px; }
   .landing-footer { flex-direction: column; gap: 35px; padding: 35px 20px; }.footer-links { gap: 30px; flex-wrap: wrap; }
 }
+
+/* ── Claude design system additions ─────────────────────────── */
+
+/* Pill filter tabs (Clients, Leads, Files) */
+.pill-tabs { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding: 14px 0 12px; border-bottom: 1px solid var(--line); margin-bottom: 0; }
+.pill-tabs button { padding: 5px 13px; border: 1px solid var(--line); border-radius: 99px; background: var(--paper); color: var(--muted); font-size: 12px; font-weight: 500; transition: .12s ease; white-space: nowrap; }
+.pill-tabs button:hover { border-color: #c8c1b4; color: var(--ink); }
+.pill-tabs button.active { background: var(--ink); border-color: var(--ink); color: white; font-weight: 600; }
+.pill-tabs .pill-tag { padding: 5px 11px; border: 1px dashed var(--line); border-radius: 99px; background: transparent; color: var(--faint); font-size: 12px; }
+
+/* Sidebar active — subtle grey, not coral */
+.nav-item.active { background: #ede9e2; color: var(--ink); font-weight: 560; }
+
+/* Overflow ··· menu */
+.overflow-menu-wrap { position: relative; display: inline-flex; }
+.overflow-btn { border: 0; background: transparent; color: var(--faint); padding: 4px 6px; border-radius: 5px; font-size: 16px; line-height: 1; letter-spacing: .05em; opacity: 0; transition: opacity .12s; }
+tr:hover .overflow-btn, .note-row:hover .overflow-btn, .task-card:hover .overflow-btn, .overflow-menu-wrap:focus-within .overflow-btn { opacity: 1; }
+.overflow-menu { position: absolute; right: 0; top: 100%; z-index: 40; min-width: 148px; padding: 4px 0; background: var(--paper); border: 1px solid var(--line); border-radius: 9px; box-shadow: 0 8px 28px rgba(0,0,0,.12); }
+.overflow-menu button { display: block; width: 100%; padding: 9px 14px; border: 0; background: transparent; text-align: left; font-size: 13px; color: var(--ink); }
+.overflow-menu button:hover { background: var(--soft); }
+.overflow-menu button.danger { color: #c0270a; }
+.overflow-menu hr { border: 0; border-top: 1px solid var(--line); margin: 4px 0; }
+
+/* Table — hide action buttons; show ··· per row */
+table tbody tr { cursor: default; }
+table tbody tr:hover { background: var(--soft); }
+table tbody tr:last-child td { border-bottom: 0; }
+
+/* Overdue text in table cells */
+.overdue-text { color: var(--orange); font-size: 11px; display: block; margin-top: 3px; }
+
+/* Notes — pinned / recent section labels */
+.notes-section-label { font: 10px/1.3 ui-monospace, monospace; letter-spacing: .14em; color: #9c9687; margin: 22px 0 10px; text-transform: uppercase; }
+.note-row { border-radius: 10px; transition: background .1s; }
+.note-row:hover { background: var(--soft); }
+.note-pinned-icon { color: var(--orange); font-size: 13px; flex-shrink: 0; }
+
+/* Task card — colour dot per list */
+.dot-0 { background: var(--orange); }
+.dot-1 { background: var(--teal); }
+.dot-2 { background: #6b5fc9; }
+.dot-3 { background: #555047; }
+.task-more { font-size: 11px; color: var(--muted); padding: 2px 0; border: 0; background: transparent; }
+.task-overdue-badge { font-size: 11px; color: var(--orange); }
+
+/* Invoice full-page */
+.invoice-page { max-width: 900px; }
+.invoice-page .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--orange); font-size: 13px; border: 0; background: transparent; padding: 0; margin-bottom: 4px; }
+.invoice-page .page-actions { display: flex; gap: 8px; }
+.invoice-section { border: 1px solid var(--line); border-radius: 11px; padding: 22px; margin-bottom: 14px; }
+.invoice-section-label { font: 10px/1.3 ui-monospace, monospace; letter-spacing: .14em; color: #9c9687; margin: 0 0 14px; text-transform: uppercase; }
+.invoice-items-grid { display: grid; grid-template-columns: 2fr 1fr 80px 100px 80px 100px 90px 24px; gap: 8px; align-items: start; font-size: 12px; }
+.invoice-items-header { color: #a09a8b; font: 10px ui-monospace, monospace; letter-spacing: .12em; padding-bottom: 8px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.invoice-summary-box { background: var(--soft); border-radius: 10px; padding: 18px; max-width: 340px; }
+.invoice-summary-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; color: var(--muted); }
+.invoice-summary-row.total { border-top: 1px solid var(--line); margin-top: 8px; padding-top: 12px; color: var(--ink); font-weight: 700; font-size: 16px; }
+.invoice-summary-row.balance { color: var(--orange); font-weight: 600; }
+
+/* Files — 2-col grid, expiry badge */
+.file-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; }
+@media (min-width: 1050px) { .file-grid-2 { grid-template-columns: repeat(3, 1fr); } }
+.file-card-2 { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); }
+.file-card-2:hover { background: var(--soft); }
+.file-type-2 { flex-shrink: 0; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 8px; background: var(--soft); color: var(--muted); font: 700 9px ui-monospace, monospace; letter-spacing: .05em; border: 1px solid var(--line); }
+.file-info { flex: 1; min-width: 0; }
+.file-info strong { display: block; font-size: 13px; font-weight: 560; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-info small { display: block; color: var(--muted); font-size: 11px; margin-top: 3px; }
+.file-expiry { display: inline-flex; align-items: center; gap: 5px; margin-top: 5px; font-size: 11px; color: var(--orange); }
+.file-expiry-expired { color: #c0270a; }
+.remind-link { border: 0; background: transparent; color: var(--teal); font-size: 11px; padding: 0; cursor: pointer; text-decoration: underline; text-decoration-color: transparent; }
+.remind-link:hover { text-decoration-color: var(--teal); }
+
+/* Expenses — icon action buttons */
+.exp-actions { display: flex; gap: 2px; }
+.exp-action-btn { width: 28px; height: 28px; border: 0; background: transparent; color: var(--faint); border-radius: 5px; display: grid; place-items: center; }
+.exp-action-btn:hover { background: var(--soft); color: var(--ink); }
+.exp-action-btn.danger:hover { color: #c0270a; background: #fceae6; }
+
+/* Home — activity feed */
+.activity-feed { display: grid; gap: 1px; }
+.activity-row { display: flex; align-items: baseline; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+.activity-row:last-child { border: 0; }
+.activity-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--line); flex-shrink: 0; margin-top: 5px; }
+.activity-module { color: var(--teal); font-size: 11px; }
+.activity-time { margin-left: auto; color: var(--muted); font-size: 11px; white-space: nowrap; }
+
+/* Quick action pills on Home */
+.quick-pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border: 1px solid var(--line); border-radius: 99px; background: var(--paper); font-size: 12px; color: var(--ink); transition: .12s ease; }
+.quick-pill:hover { border-color: #c8c1b4; background: var(--soft); }
+.quick-pill-orange { border-color: var(--orange); color: var(--orange); background: var(--danger-soft); }
+
+/* Reminder row improvements */
+.reminder-row-inner { flex: 1; min-width: 0; }
+.reminder-client-tag { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border: 1px solid var(--line); border-radius: 99px; font-size: 11px; color: #615d53; background: #faf8f3; margin: 4px 0; }
+.reminder-priority { font-size: 11px; font-weight: 600; }
+.reminder-priority-high { color: var(--orange); }
+
+/* Lead owner avatar chip */
+.owner-chip { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; background: var(--soft); border: 1px solid var(--line); font-size: 10px; font-weight: 600; color: var(--ink); }
+
+/* What Enkel is/isn't section */
+.enkel-is-section { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0; }
+.enkel-is-card { padding: 24px; border: 1px solid var(--line); border-radius: 14px; }
+.enkel-is-card h3 { font-size: 11px; letter-spacing: .14em; font-family: ui-monospace, monospace; margin: 0 0 16px; }
+.enkel-is-card .is-label { color: var(--teal); }
+.enkel-is-card .not-label { color: var(--orange); }
+.enkel-is-row { display: flex; align-items: baseline; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+.enkel-is-row:last-child { border: 0; }
+.enkel-is-check { color: var(--teal); font-size: 14px; flex-shrink: 0; }
+.enkel-is-x { color: var(--faint); font-size: 14px; flex-shrink: 0; }

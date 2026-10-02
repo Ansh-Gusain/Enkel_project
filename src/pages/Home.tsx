@@ -1,42 +1,52 @@
 // ─────────────────────────────────────────────────────────────
-// Home.tsx — dashboard overview: attention items, upcoming
-//            tasks, business pulse metrics, quick actions
+// Home.tsx — dashboard: attention, today/tomorrow/this week,
+//            business pulse, recent activity, quick actions
 // ─────────────────────────────────────────────────────────────
-import { Button, Icon, Metric, PageHeader } from "../components/ui";
+import { Icon, Metric, PageHeader } from "../components/ui";
 import { useStoredState } from "../hooks/useStoredState";
 
-// Items that need the user's attention (overdue invoices, reminders)
 const attention = [
-  ["Basanti Textiles — INV-0025",                 "₹20k outstanding · Sales",                               "38 days overdue"],
-  ["Meridian Labs — INV-0031",                    "₹48k outstanding · Sales",                               "20 days overdue"],
-  ["Wavelength FM — INV-0030",                    "₹32k outstanding · Sales",                               "12 days overdue"],
-  ["Priya Nair — Printer cartridge",              "₹1k pending reimbursement · No receipt attached · Expenses", "Needs approval"],
-  ["Chase the signed addendum from Northpoint Dental", "Northpoint Dental · Reminders",                    "5 days overdue"],
-  ["Send Sanchi Interiors the revised scope",     "Sanchi Interiors · Reminders",                           "5 days overdue"],
+  { title: "Basanti Textiles — INV-0025",                  sub: "₹20k outstanding · Sales",                                    badge: "38 days overdue",  dest: "sales"     },
+  { title: "Meridian Labs — INV-0031",                     sub: "₹48k outstanding · Sales",                                    badge: "20 days overdue",  dest: "sales"     },
+  { title: "Wavelength FM — INV-0030",                     sub: "₹32k outstanding · Sales",                                    badge: "12 days overdue",  dest: "sales"     },
+  { title: "Priya Nair — Printer cartridge",               sub: "₹1k pending reimbursement · No receipt attached · Expenses",  badge: "Needs approval",   dest: "expenses"  },
+  { title: "Chase the signed addendum from Northpoint Dental", sub: "Northpoint Dental · Reminders",                           badge: "5 days overdue",   dest: "reminders" },
+  { title: "Send Sanchi Interiors the revised scope",      sub: "Sanchi Interiors · Reminders",                                badge: "5 days overdue",   dest: "reminders" },
 ];
 
-// Upcoming tasks shown in the "Today & upcoming" section
-const upcoming = [
-  ["Send the revised SOW to Meridian Labs",        "Meridian Labs",          "11:00 AM"],
-  ["Call about proposal — Rahul Sharma",           "Meridian Labs",          "Today, 11:00 AM"],
-  ["Stand-up with the team",                       "Personal",               "12:30 PM"],
-  ["Follow up with Harbour Coffee on the quote",   "Harbour Coffee Roasters","Tomorrow"],
+// Grouped into Today / Tomorrow / This Week
+const upcoming = {
+  TODAY: [
+    { title: "Send the revised SOW to Meridian Labs",       client: "Meridian Labs",           time: "11:00 AM",      icon: "clock"   },
+    { title: "Call about proposal — Rahul Sharma",          client: "Meridian Labs",           time: "Today, 11:00 AM", icon: "chart"  },
+    { title: "Stand-up with the team",                      client: "Personal",                time: "12:30 PM",      icon: "clock"   },
+  ],
+  TOMORROW: [
+    { title: "Follow up with Harbour Coffee on the quote",  client: "Harbour Coffee Roasters", time: "Tomorrow",      icon: "clock"   },
+    { title: "Intro call — Kunal Bose",                     client: "Alloy Studio",            time: "Tomorrow, 10:30", icon: "chart" },
+  ],
+  "THIS WEEK": [
+    { title: "Call Arjun Kapoor about the Kalyan Foods pilot", client: "Kalyan Foods",         time: "Wed 19 Aug",    icon: "clock"   },
+  ],
+};
+
+const recentActivity = [
+  { text: "Meridian Labs — call logged",                              module: "Clients",          time: "Today, 9:02 AM"      },
+  { text: "Note updated — \"Q4 onboarding improvements\"",           module: "Notes",            time: "Today"               },
+  { text: "Kulkarni Clinic — call logged",                           module: "Clients",          time: "Yesterday, 11:40 AM" },
+  { text: "Creative generated for UI/UX Design (Social Post)",       module: "Design & Creative", time: "2 days ago"         },
+  { text: "Lakeview Realty — ₹15k payment recorded by Ananya Sachan", module: "Sales",           time: "8 days ago"          },
 ];
 
 export default function Home() {
-  // dismissed stores which attention items the user has closed
   const [dismissed, setDismissed] = useStoredState<string[]>("dismissed-attention", []);
-  const visibleAttention = attention.filter((item) => !dismissed.includes(item[0]));
+  const visibleAttention = attention.filter((item) => !dismissed.includes(item.title));
 
-  // Navigate to a module by setting the URL hash
   const go = (target: string) => { window.location.hash = `#app/${target}`; };
 
-  // Wipe all localStorage demo data and reload
   const resetWorkspace = () => {
-    if (!window.confirm("Restore all browser demo data to its original state? Attendance biometric data is not affected.")) return;
-    Object.keys(localStorage)
-      .filter((key) => key.startsWith("enkel:"))
-      .forEach((key) => localStorage.removeItem(key));
+    if (!window.confirm("Restore all browser demo data? Attendance biometric data is not affected.")) return;
+    Object.keys(localStorage).filter((k) => k.startsWith("enkel:")).forEach((k) => localStorage.removeItem(k));
     window.location.reload();
   };
 
@@ -49,82 +59,109 @@ export default function Home() {
           new Intl.DateTimeFormat("en-IN", { weekday: "long", day: "numeric", month: "long" }).format(new Date())
           + " — here's what needs you today."
         }
-        action={<Button variant="secondary" onClick={resetWorkspace}>Reset workspace</Button>}
       />
 
       {/* ── Needs attention ── */}
       <section>
         <h2>Needs your attention <span className="count">{visibleAttention.length}</span></h2>
         <div className="attention-list">
-          {visibleAttention.map((a, i) => (
-            <div className="attention-row" key={a[0]}>
-              <span className="row-icon">
-                <Icon name={i > 3 ? "clock" : "receipt"} size={17} />
-              </span>
-              {/* clicking the row navigates to the relevant module */}
-              <button
-                className="row-record grow"
-                onClick={() => go(i < 3 ? "sales" : i === 3 ? "expenses" : "reminders")}
-              >
-                <strong>{a[0]}</strong>
-                <small>{a[1]}</small>
+          {visibleAttention.map((a) => (
+            <div className="attention-row" key={a.title}>
+              <span className="row-icon"><Icon name="receipt" size={16} /></span>
+              <button className="row-record grow" onClick={() => go(a.dest)}>
+                <strong>{a.title}</strong>
+                <small>{a.sub}</small>
               </button>
-              <span className="status status-danger">{a[2]}</span>
-              <button
-                className="icon-btn"
-                onClick={() => setDismissed((items) => [...items, a[0]])}
-                aria-label="Dismiss"
-              >×</button>
+              <span className="status status-danger">{a.badge}</span>
+              <button className="icon-btn" onClick={() => setDismissed((d) => [...d, a.title])} aria-label="Dismiss">×</button>
             </div>
           ))}
         </div>
+        {visibleAttention.length < attention.length && (
+          <button className="text-action" onClick={() => go("reminders")}>
+            +{attention.length - visibleAttention.length} more need attention — view in Reminders →
+          </button>
+        )}
+        {visibleAttention.length === attention.length && (
+          <button className="text-action" onClick={() => go("reminders")}>View all in Reminders →</button>
+        )}
+      </section>
+
+      {/* ── Today & upcoming — grouped ── */}
+      <section>
+        <h2>Today & upcoming</h2>
+        {Object.entries(upcoming).map(([group, items]) => (
+          <div key={group}>
+            <p className="eyebrow" style={{ margin: "14px 0 8px" }}>{group}</p>
+            {items.map((u) => (
+              <div className="simple-row" key={u.title} style={{ marginBottom: 6 }}>
+                <Icon name={u.icon} size={16} />
+                <div className="grow">
+                  <strong>{u.title}</strong>
+                  <small>{u.client}</small>
+                </div>
+                <span className="muted" style={{ fontSize: 12, whiteSpace: "nowrap" }}>{u.time}</span>
+              </div>
+            ))}
+          </div>
+        ))}
         <button className="text-action" onClick={() => go("reminders")}>View all in Reminders →</button>
       </section>
 
-      {/* ── Today & upcoming ── */}
-      <section>
-        <h2>Today & upcoming</h2>
-        <div className="upcoming-list">
-          {upcoming.map((u) => (
-            <div className="simple-row" key={u[0]}>
-              <Icon name="clock" />
-              <div className="grow">
-                <strong>{u[0]}</strong>
-                <small>{u[1]}</small>
-              </div>
-              <span className="muted">{u[2]}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Business pulse metrics ── */}
+      {/* ── Business pulse ── */}
       <section>
         <h2>Business pulse</h2>
         <div className="metrics">
-          <Metric value="₹2.1L" label="Outstanding receivables" />
-          <Metric value="11"    label="Active clients" />
-          <Metric value="14"    label="Open tasks" />
-          <Metric value="7/8"   label="Team attendance" />
+          <Metric value="4"     label="Client follow-ups due" />
+          <Metric value="1"     label="Leads needing attention" />
+          <Metric value="5"     label="Invoices awaiting payment" note="₹2.1L outstanding" />
+          <Metric value="2"     label="Tasks due this week" />
           <Metric value="₹9k"   label="Spent this month" />
+        </div>
+      </section>
+
+      {/* ── Recent activity ── */}
+      <section>
+        <h2>Recent activity</h2>
+        <div className="activity-feed">
+          {recentActivity.map((a) => (
+            <div className="activity-row" key={a.text}>
+              <span className="activity-dot" />
+              <span className="grow">{a.text} · <span className="activity-module">{a.module}</span></span>
+              <span className="activity-time">{a.time}</span>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* ── Quick actions ── */}
       <section>
         <h2>Quick actions</h2>
-        <div className="quick-actions">
-          <Button variant="secondary" onClick={() => go("sales")}>
-            <Icon name="plus" size={14} /> Create invoice
-          </Button>
-          <Button variant="secondary" onClick={() => go("clients")}>
-            <Icon name="plus" size={14} /> Add client
-          </Button>
-          <Button variant="secondary" onClick={() => go("tasks")}>
-            <Icon name="plus" size={14} /> Add task
-          </Button>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          {[
+            { label: "+ Add reminder", dest: "reminders" },
+            { label: "+ Add client",   dest: "clients"   },
+            { label: "+ Add task",     dest: "tasks"     },
+            { label: "+ Add lead",     dest: "leads"     },
+            { label: "+ Add sale",     dest: "sales"     },
+            { label: "+ Add expense",  dest: "expenses"  },
+          ].map((q) => (
+            <button key={q.label} className="quick-pill" onClick={() => go(q.dest)}>
+              {q.label}
+            </button>
+          ))}
         </div>
       </section>
+
+      {/* Reset workspace */}
+      <div style={{ marginTop: 40 }}>
+        <button
+          style={{ fontSize: 11, color: "var(--faint)", border: 0, background: "transparent", cursor: "pointer" }}
+          onClick={resetWorkspace}
+        >
+          Reset demo workspace
+        </button>
+      </div>
     </div>
   );
 }
