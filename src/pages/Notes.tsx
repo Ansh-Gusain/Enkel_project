@@ -1,4 +1,4 @@
-// ─────────────────────────────────────────────────────────────
+﻿// ─────────────────────────────────────────────────────────────
 // Notes.tsx — PINNED / RECENT section headers, ··· overflow
 // ─────────────────────────────────────────────────────────────
 import { useState } from "react";
@@ -49,6 +49,7 @@ export default function Notes() {
   const [captureText, setCaptureText] = useState("");
   const [q, setQ]   = useState("");
   const [tab, setTab] = useState("All Notes");
+  const [sortNewest, setSortNewest] = useState(true);
 
   const [notes, setNotes] = useStoredState<Note[]>(
     "notes",
@@ -99,6 +100,8 @@ export default function Notes() {
 
   const pinned = filtered.filter((n) => n.pinned);
   const recent = filtered.filter((n) => !n.pinned);
+  // sort: newest first or oldest first based on insertion order (id contains timestamp)
+  const sortedRecent = [...recent].sort((a, b) => sortNewest ? b.id.localeCompare(a.id) : a.id.localeCompare(b.id));
 
   const actions = {
     pin:     (id: string) => setNotes((cur) => cur.map((n) => n.id === id ? { ...n, pinned: !n.pinned } : n)),
@@ -154,7 +157,7 @@ export default function Notes() {
               Sort <button style={{ border: 0, background: "transparent", color: "var(--muted)", fontSize: 11, cursor: "pointer" }}>Recently updated ⌄</button>
             </div>
           </div>
-          {recent.map((note) => <NoteCard key={note.id} note={note} onEdit={() => openEdit(note)} actions={actions} />)}
+          {sortedRecent.map((note) => <NoteCard key={note.id} note={note} onEdit={() => openEdit(note)} actions={actions} />)}
         </>
       )}
 
@@ -226,3 +229,4 @@ function NoteCard({ note, onEdit, actions }: {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-// ─────────────────────────────────────────────────────────────
+﻿// ─────────────────────────────────────────────────────────────
 // Leads.tsx — pipeline with pill tabs + avatar owner chip + overflow menu
 // ─────────────────────────────────────────────────────────────
 import { useRef, useState } from "react";
@@ -19,9 +19,9 @@ const STAGES  = ["All","New","Working","Qualified","Proposal","Won","Lost"];
 const OWNERS  = ["Abhishek","Ananya","Priya Nair","Karan Mehta"];
 const SOURCES = ["Referral","Website","WhatsApp","Email","Other"];
 
-type Lead = { id:string; initials:string; name:string; email:string; company:string; industry:string; stage:string; owner:string; source:string; priority:string; action:string; actionTime:string; notes:string; attention:boolean; last:string; };
+type Lead = { id:string; initials:string; name:string; email:string; phone:string; company:string; industry:string; stage:string; owner:string; source:string; priority:string; action:string; actionTime:string; notes:string; attention:boolean; last:string; };
 const blank = (): Omit<Lead,"id"|"initials"|"attention"|"last"> => ({
-  name:"",company:"",industry:"",email:"",stage:"New",owner:"Ananya",source:"Other",priority:"Medium",action:"",actionTime:"",notes:"",
+  name:"",company:"",industry:"",phone:"",email:"",stage:"New",owner:"Ananya",source:"Other",priority:"Medium",action:"",actionTime:"",notes:"",
 });
 
 function OwnerChip({ name }: { name: string }) {
@@ -63,7 +63,7 @@ export default function Leads() {
 
   const openAdd = () => { setForm(blank()); setEditId(null); setDrawer(true); };
   const openEdit = (l: Lead) => {
-    setForm({ name:l.name,company:l.company,industry:l.industry,email:l.email,stage:l.stage,owner:l.owner,source:l.source,priority:l.priority,action:l.action,actionTime:l.actionTime,notes:l.notes });
+    setForm({ name:l.name,company:l.company,industry:l.industry,phone:l.phone??"",email:l.email,stage:l.stage,owner:l.owner,source:l.source,priority:l.priority,action:l.action,actionTime:l.actionTime,notes:l.notes });
     setEditId(l.id); setDrawer(true);
   };
 
@@ -202,7 +202,7 @@ export default function Leads() {
             <input style={inputStyle} placeholder="Meridian Labs" value={form.company} onChange={set("company")} />
           </Field>
           <Field label="Phone & email" row>
-            <input style={{ ...inputStyle, flex: 1 }} placeholder="+91 98200 41122" value={""} readOnly />
+            <input style={{ ...inputStyle, flex: 1 }} placeholder="+91 98200 41122" value={form.phone} onChange={set("phone")} />
             <input style={{ ...inputStyle, flex: 1 }} type="email" placeholder="rahul@meridian.com" value={form.email} onChange={set("email")} />
           </Field>
 
@@ -240,3 +240,5 @@ export default function Leads() {
     </div>
   );
 }
+
+

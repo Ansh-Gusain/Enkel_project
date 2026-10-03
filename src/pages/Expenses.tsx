@@ -77,6 +77,7 @@ export default function Expenses() {
       if (activeTab==="All Expenses") return true;
       if (activeTab==="Needs Attention") return r.status==="Pending review"||r.status==="Unpaid";
       if (activeTab==="Reimbursements")  return r.paidBy!=="Business";
+      if (activeTab==="Recurring")      return ["SaaS / Software","Office Rent"].includes(r.category);
       return true;
     });
 
@@ -84,7 +85,7 @@ export default function Expenses() {
     { label:`All Expenses ${records.length}`,                                                     key:"All Expenses"    },
     { label:`Needs Attention ${needsAttn.length}`,                                                 key:"Needs Attention" },
     { label:`Reimbursements ${records.filter((r)=>r.paidBy!=="Business").length}`,                key:"Reimbursements"  },
-    { label:"Recurring 5",                                                                          key:"Recurring"       },
+    { label:`Recurring ${records.filter((r) => ["SaaS / Software","Office Rent"].includes(r.category)).length}`, key:"Recurring" },
     { label:"Reports",                                                                              key:"Reports"         },
   ];
 
@@ -215,3 +216,4 @@ export default function Expenses() {
     </div>
   );
 }
+

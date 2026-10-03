@@ -1,4 +1,4 @@
-// ─────────────────────────────────────────────────────────────
+﻿// ─────────────────────────────────────────────────────────────
 // HR.tsx — employee records with detailed add employee drawer
 // ─────────────────────────────────────────────────────────────
 import { useState } from "react";
@@ -105,10 +105,22 @@ export default function HR() {
         </div>
       </section>
 
-      <section>
-        <h2>Needs attention <span className="count">1</span></h2>
-        <div className="notice"><span className="danger-dot" />Arjun Mehta's contact details are incomplete.<span>›</span></div>
-      </section>
+      {(() => {
+        const incomplete = safeEmployees.filter((e) => !e.phone && !e.personalEmail);
+        if (incomplete.length === 0) return null;
+        return (
+          <section>
+            <h2>Needs attention <span className="count">{incomplete.length}</span></h2>
+            {incomplete.map((emp) => (
+              <div className="notice" key={emp.id}>
+                <span className="danger-dot" />
+                {emp.firstName} {emp.lastName}&apos;s contact details are incomplete.
+                <button style={{ border:0, background:"transparent", cursor:"pointer", color:"var(--orange)", fontSize:12, marginLeft:8 }} onClick={() => openEdit(emp)}>Fix →</button>
+              </div>
+            ))}
+          </section>
+        );
+      })()}
 
       <section>
         <h2>Manage</h2>
@@ -189,3 +201,4 @@ export default function HR() {
     </div>
   );
 }
+

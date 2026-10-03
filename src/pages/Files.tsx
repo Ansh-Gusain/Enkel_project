@@ -173,7 +173,15 @@ export default function Files() {
                       {expLabel}
                     </span>
                     {" "}
-                    <button className="remind-link">Remind me</button>
+                    <button className="remind-link" onClick={() => {
+                    const existing = JSON.parse(localStorage.getItem("enkel:reminders") ?? "[]");
+                    const id = `reminder-${Date.now()}`;
+                    const d = new Date(file.expiryDate);
+                    d.setDate(d.getDate() - 7);
+                    existing.unshift({ id, title: `${file.name} expires soon`, client: "", date: file.expiryDate, time: "09:00", done: false, notes: `Auto-reminder for expiring document.` });
+                    localStorage.setItem("enkel:reminders", JSON.stringify(existing));
+                    alert(`Reminder added for 7 days before expiry.`);
+                  }}>Remind me</button>
                   </div>
                 )}
               </div>
@@ -237,4 +245,5 @@ export default function Files() {
     </div>
   );
 }
+
 
